@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Authentication</title>
+    <link href="https://fonts.googleapis.com/css?family=Nunito:400,600,700" rel="stylesheet">
+    <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div id="login_div" class="main_div">
+        <h3>
+            <center>Login Authentication</center>
+        </h3>
+        <input type="email" placeholder="Email..." id="email_field" />
+        <input type="password" placeholder="Password..." id="password_field" />
+        <button onclick="login()">Login</button>
+    </div>
+    <div id="user_div" class="loggedin_div">
+        <h3><center>YAYYY! You successfully logged-in using Firebase.....</center></h3>
+        <button onclick="logout()">Logout</button>
+    </div>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js"></script>
+    <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyDyuiEQA3rqEWtUoSvOWX9om3Y256nNa8Q",
+            authDomain: "building-project-sharing-media.firebaseapp.com",
+            projectId: "building-project-sharing-media",
+            storageBucket: "building-project-sharing-media.appspot.com",
+            messagingSenderId: "164855375198",
+            appId: "1:164855375198:web:1c15c7dfd5c481847d5bcf"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                document.getElementById("user_div").style.display = "block";
+                document.getElementById("login_div").style.display = "none";
+            } else {
+                document.getElementById("user_div").style.display = "none";
+                document.getElementById("login_div").style.display = "block";
+            }
+        });
+
+        function login(){
+            var userEmail = document.getElementById("email_field").value;
+            var userPass = document.getElementById("password_field").value;
+
+            firebase.auth().signInWithEmailAndPassword(userEmail, userPass).catch(function(error) {
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                window.alert("Error : " + errorMessage);
+            });
+        }
+
+        function logout(){
+            firebase.auth().signOut();
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Social Media App</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Social Media App</h1>
+        <button id="login">Sign in with Google</button>
+        <button id="create-post" style="display: none;">Create Post</button>
+    </header>
+    <main>
+        <div id="posts"></div>
+    </main>
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+        import {
+            getAuth,
+            signInWithPopup,
+            GoogleAuthProvider,
+            onAuthStateChanged,
+        } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-auth.js";
+        import {
+            getFirestore,
+            getDocs,
+            collection,
+        } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDyuiEQA3rqEWtUoSvOWX9om3Y256nNa8Q",
+            authDomain: "building-project-sharing-media.firebaseapp.com",
+            projectId: "building-project-sharing-media",
+            storageBucket: "building-project-sharing-media.appspot.com",
+            messagingSenderId: "164855375198",
+            appId: "1:164855375198:web:1c15c7dfd5c481847d5bcf",
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth();
+        const provider = new GoogleAuthProvider();
+        const db = getFirestore();
+
+        document.getElementById("login").addEventListener("click", () => {
+            signInWithPopup(auth, provider).then(() => {
+                window.location.replace("/");
+            });
+        });
+
+        document.getElementById("create-post").addEventListener("click", () => {
+            window.location.href = "create.html";
+        });
+
+        const loadPosts = async () => {
+            const div = document.getElementById("posts");
+            const posts = await getDocs(collection(db, "posts"));
+            posts.forEach((doc) => {
+                const post = doc.data();
+                const postElement = document.createElement("div");
+                postElement.className = "post";
+
+                const header = document.createElement("div");
+                header.className = "post-header";
+                const name = document.createElement("h2");
+                name.innerText = post.name;
+                const author = document.createElement("span");
+                author.className = "post-author";
+                author.innerText = `by ${post.author}`;
+                header.appendChild(name);
+                header.appendChild(author);
+
+                const body = document.createElement("div");
+                body.className = "post-body";
+                const description = document.createElement("p");
+                description.innerText = post.description;
+                body.appendChild(description);
+
+                postElement.appendChild(header);
+                postElement.appendChild(body);
+                div.appendChild(postElement);
+            });
+        };
+
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                document.getElementById("create-post").style.display = "block";
+            } else {
+                window.location.href = "login.html";
+            }
+            loadPosts();
+        });
+    </script>
+</body>
+</html>
