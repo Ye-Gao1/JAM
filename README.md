@@ -1,4 +1,4 @@
-Building Your Own Social Media w/ 🔥 Firebase 🏰, lots thanks to Jaden
+Fork and run using a liveserver replace the firbase api key with yours firebase key Building Your Own Social Media w/ 🔥 Firebase 🏰, lots thanks to Jaden
 
 ![image](https://github.com/user-attachments/assets/ded122d4-2e0e-4090-bc3d-3536ad4cca73)
 ![image](https://github.com/user-attachments/assets/525dd0dd-77d6-4536-9a21-07429f7be185)
